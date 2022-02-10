@@ -1,0 +1,24 @@
+{
+    "name": "cerebralfart/laravel-crud-controller",
+    "description": "An easy way to do your CRUD stuff",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Cerebralfart\\LaravelCRUD\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sven Mol",
+            "email": "sven@devcake.nl"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^9.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.0"
+    }
+}
