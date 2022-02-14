@@ -36,7 +36,7 @@ abstract class CRUDController extends Controller {
             : sprintf('%s.%s', $this->views, $name);
     }
 
-    private function updateModel(Model $model, Request $request) {
+    protected function updateModel(Model $model, Request $request) {
         $data = $request->input();
         foreach ($data as $key => $value) {
             $this->updateField($model, $key, $value);
@@ -116,7 +116,7 @@ abstract class CRUDController extends Controller {
         $model->{$key} = $value;
     }
 
-    private function updateRelation(Model $model, string $key, mixed $value): void {
+    protected function updateRelation(Model $model, string $key, mixed $value): void {
         $relation = $model->{$key}();
         if (method_exists($relation, 'sync')) {
             $relation->sync($value === null ? [] : $value);
@@ -125,7 +125,7 @@ abstract class CRUDController extends Controller {
         }
     }
 
-    private function updateField(Model $model, string $key, mixed $value): void {
+    protected function updateField(Model $model, string $key, mixed $value): void {
         if (Str::startsWith($key, '_')) return;
 
         if ($model->isRelation($key)) $this->updateRelation($model, $key, $value);
