@@ -126,7 +126,7 @@ abstract class CRUDController extends Controller {
     }
 
     private function updateField(Model $model, string $key, mixed $value): void {
-        if (!Str::startsWith($key, '_')) return;
+        if (Str::startsWith($key, '_')) return;
 
         if ($model->isRelation($key)) $this->updateRelation($model, $key, $value);
         elseif ($model->isFillable($key)) $this->updateAttribute($value, $key, $model);
