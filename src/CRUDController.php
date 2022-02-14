@@ -129,7 +129,7 @@ abstract class CRUDController extends Controller {
         if (Str::startsWith($key, '_')) return;
 
         if ($model->isRelation($key)) $this->updateRelation($model, $key, $value);
-        elseif ($model->isFillable($key)) $this->updateAttribute($value, $key, $model);
+        elseif ($model->isFillable($key)) $this->updateAttribute($model, $key, $value);
         else throw new Exception("Parameter ${key} could not be persisted");
     }
 }
