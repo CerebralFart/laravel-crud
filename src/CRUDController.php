@@ -77,7 +77,7 @@ abstract class CRUDController extends Controller {
             $qb = $this->getModel()::query();
             $instance = $qb->newModelInstance();
             $this->updateModel($instance, $request);
-            return redirect()->route($this->getView());
+            return redirect()->back();
         } else {
             return view($this->getView('create'));
         }
