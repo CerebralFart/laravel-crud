@@ -12,10 +12,11 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @property-read string $model
+ * @property-read string $views
+ */
 abstract class CRUDController extends Controller {
-    protected $model = null;
-    protected $views = null;
-
     protected function resolveModel($id) {
         return $this->getModel()::find($id);
     }
