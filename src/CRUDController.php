@@ -70,7 +70,7 @@ abstract class CRUDController extends Controller {
     public function create(Request $request) {
         $response = Gate::inspect('create', $this->getModel());
         if ($response->denied())
-            throw new NotFoundHttpException($response->message());
+            throw new AccessDeniedHttpException($response->message());
 
         if ($request->method() === 'POST') {
             /** @var Builder $qb */
