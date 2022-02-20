@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @property-read string $model
+ * @property-read class-string<Model> $model
  * @property-read string $views
  */
 abstract class CRUDController extends Controller {
@@ -21,13 +21,21 @@ abstract class CRUDController extends Controller {
         return $this->getModel()::find($id);
     }
 
-    protected function getModel() {
+    /**
+     * Returns the configured model for this controller, or throws an exception if it is not properly defined
+     * @return class-string<Model>
+     * @throws Exception
+     */
+    protected function getModel(): string {
         if ($this->model === null)
             throw new Exception(sprintf('Model is not defined for %s', get_class($this)));
 
         return $this->model;
     }
 
+    /**
+     * @deprecated
+     */
     protected function getView($name = null) {
         if ($this->views === null)
             throw new Exception(sprintf('View-space is not defined for %s', get_class($this)));
@@ -35,14 +43,6 @@ abstract class CRUDController extends Controller {
         return $name === null
             ? $this->views
             : sprintf('%s.%s', $this->views, $name);
-    }
-
-    protected function updateModel(Model $model, Request $request) {
-        $data = $request->input();
-        foreach ($data as $key => $value) {
-            $this->updateField($model, $key, $value);
-        }
-        $model->save();
     }
 
     public function list(Request $request) {
@@ -117,8 +117,25 @@ abstract class CRUDController extends Controller {
         }
     }
 
-    protected function updateAttribute(Model $model, string $key, mixed $value): void {
-        $model->{$key} = $value;
+    /*
+     * ===================
+     *    MODEL HELPERS
+     * ===================
+     */
+    protected function updateModel(Model $model, Request $request): void {
+        $data = $request->input();
+        foreach ($data as $key => $value) {
+            $this->updateField($model, $key, $value);
+        }
+        $model->save();
+    }
+
+    protected function updateField(Model $model, string $key, mixed $value): void {
+        if (Str::startsWith($key, '_')) return;
+
+        if ($model->isRelation($key)) $this->updateRelation($model, $key, $value);
+        elseif ($model->isFillable($key)) $this->updateAttribute($model, $key, $value);
+        else throw new Exception("Parameter ${key} could not be persisted");
     }
 
     protected function updateRelation(Model $model, string $key, mixed $value): void {
@@ -130,11 +147,7 @@ abstract class CRUDController extends Controller {
         }
     }
 
-    protected function updateField(Model $model, string $key, mixed $value): void {
-        if (Str::startsWith($key, '_')) return;
-
-        if ($model->isRelation($key)) $this->updateRelation($model, $key, $value);
-        elseif ($model->isFillable($key)) $this->updateAttribute($model, $key, $value);
-        else throw new Exception("Parameter ${key} could not be persisted");
+    protected function updateAttribute(Model $model, string $key, mixed $value): void {
+        $model->{$key} = $value;
     }
 }
