@@ -72,14 +72,15 @@ abstract class CRUDController extends Controller {
         if ($response->denied())
             throw new AccessDeniedHttpException($response->message());
 
+        /** @var Builder $qb */
+        $qb = $this->getModel()::query();
+        $instance = $qb->newModelInstance();
+
         if ($request->method() === 'POST') {
-            /** @var Builder $qb */
-            $qb = $this->getModel()::query();
-            $instance = $qb->newModelInstance();
             $this->updateModel($instance, $request);
             return redirect()->back();
         } else {
-            return view($this->getView('create'));
+            return view($this->getView('create'), ['item' => $instance]);
         }
     }
 
