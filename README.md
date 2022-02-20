@@ -12,10 +12,9 @@ There are still a lot of features I want to implement, which are listed below. N
 - The list page should allow filtering, both on database level and in code
 - The list page should allow ordering, both on database level and in code
 - A defaults for filtering and ordering may be configured
-- Deleting should be confirmable
 - View resolution should be more flexible
   - list => list.blade.php, Raise an error
   - view => view.blade.php, Raise an error
   - create => create.blade.php, upsert.blade.php, Raise an error
   - update => update.blade.php, upsert.blade.php, Raise an error
-  - delete => delete.blade.php, Delete without confirmation
+  - delete => delete.blade.php, Raise an error

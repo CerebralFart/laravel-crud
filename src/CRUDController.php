@@ -109,8 +109,12 @@ abstract class CRUDController extends Controller {
         if ($response->denied())
             throw new NotFoundHttpException($response->message());
 
-        $instance->delete();
-        return redirect()->back();
+        if ($request->isMethod('POST')) {
+            $instance->delete();
+            return redirect()->back();
+        } else {
+            return view($this->getView('delete'), ['item' => $instance]);
+        }
     }
 
     protected function updateAttribute(Model $model, string $key, mixed $value): void {
