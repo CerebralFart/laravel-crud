@@ -2,21 +2,21 @@
 
 namespace Cerebralfart\LaravelCRUD;
 
+use Cerebralfart\LaravelCRUD\Helpers\AuthHelper;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @property-read class-string<Model> $model
  * @property-read string $views
  */
 abstract class CRUDController extends Controller {
+    use AuthHelper;
+
     protected function resolveModel($id) {
         return $this->getModel()::find($id);
     }
@@ -46,9 +46,7 @@ abstract class CRUDController extends Controller {
     }
 
     public function list(Request $request) {
-        $response = Gate::inspect('viewAny', $this->getModel());
-        if ($response->denied())
-            throw new AccessDeniedHttpException($response->message());
+        $this->authorize('viewAny', $this->getModel());
 
         return view($this->getView('list'), [
             'items' => $this->getModel()::all(),
@@ -57,20 +55,13 @@ abstract class CRUDController extends Controller {
 
     public function show(Request $request, string $id) {
         $instance = $this->resolveModel($id);
-        if (!$instance)
-            throw new NotFoundHttpException();
-
-        $response = Gate::inspect('view', $instance);
-        if ($response->denied())
-            throw new NotFoundHttpException();
+        $this->authorize('view', $instance);
 
         return view($this->getView('show'), ['item' => $instance]);
     }
 
     public function create(Request $request) {
-        $response = Gate::inspect('create', $this->getModel());
-        if ($response->denied())
-            throw new AccessDeniedHttpException($response->message());
+        $this->authorize('create', $this->getModel());
 
         /** @var Builder $qb */
         $qb = $this->getModel()::query();
@@ -86,12 +77,7 @@ abstract class CRUDController extends Controller {
 
     public function update(Request $request, string $id) {
         $instance = $this->resolveModel($id);
-        if (!$instance)
-            throw new NotFoundHttpException();
-
-        $response = Gate::inspect('update', $instance);
-        if ($response->denied())
-            throw new NotFoundHttpException($response->message());
+        $this->authorize('update', $instance);
 
         if ($request->method() === 'POST') {
             $this->updateModel($instance, $request);
@@ -103,12 +89,7 @@ abstract class CRUDController extends Controller {
 
     public function delete(Request $request, string $id) {
         $instance = $this->resolveModel($id);
-        if (!$instance)
-            throw new NotFoundHttpException();
-
-        $response = Gate::inspect('delete', $instance);
-        if ($response->denied())
-            throw new NotFoundHttpException($response->message());
+        $this->authorize('delete', $instance);
 
         if ($request->isMethod('POST')) {
             $instance->delete();
