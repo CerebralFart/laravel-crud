@@ -8,6 +8,11 @@
             "Cerebralfart\\LaravelCRUD\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Cerebralfart\\LaravelCRUD\\Test\\": "test/"
+        }
+    },
     "authors": [
         {
             "name": "Sven Mol",

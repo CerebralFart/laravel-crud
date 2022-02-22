@@ -1,3 +1,6 @@
 # Liraries
 composer.lock
 /vendor/
+
+# Testing
+/.phpunit.result.cache
