@@ -3,6 +3,7 @@
 namespace Cerebralfart\LaravelCRUD;
 
 use Cerebralfart\LaravelCRUD\Helpers\AuthHelper;
+use Cerebralfart\LaravelCRUD\Helpers\PropHelper;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +16,7 @@ use Illuminate\Support\Str;
  * @property-read string $views
  */
 abstract class CRUDController extends Controller {
-    use AuthHelper;
+    use AuthHelper, PropHelper;
 
     protected function resolveModel($id) {
         return $this->getModel()::find($id);
@@ -25,6 +26,7 @@ abstract class CRUDController extends Controller {
      * Returns the configured model for this controller, or throws an exception if it is not properly defined
      * @return class-string<Model>
      * @throws Exception
+     * @deprecated
      */
     protected function getModel(): string {
         if ($this->model === null)
