@@ -14,7 +14,7 @@ class Controller extends CRUDController {
 }
 ```
 
-### Customizing authorization error messages
+#### Customizing authorization error messages
 The CRUDController provides default error messages for all routes, but these can be overridden if you want to provide more specific errors.
 The easiest way to do so is via the `$authErrors` property on the controller.
 ```php
