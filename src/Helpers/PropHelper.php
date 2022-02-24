@@ -9,6 +9,8 @@ use ReflectionClass;
 trait PropHelper {
     private static array $requiredProps = ['model', 'views'];
 
+    private ?ReflectionClass $reflection = null;
+
     /**
      * Resolves default values for a given property, or throws an error if it should've been configured
      * @param string $key
@@ -21,9 +23,9 @@ trait PropHelper {
         } else {
             $defaultName = 'default' . Str::ucfirst($key);
 
-            $cRef = new ReflectionClass($this); // TODO this should be cached
-            $pRef = $cRef->hasProperty($defaultName) ? $cRef->getProperty($defaultName) : null;
-            $mRef = $cRef->hasMethod($defaultName) ? $cRef->getMethod($defaultName) : null;
+            $this->initRef();
+            $pRef = $this->reflection->hasProperty($defaultName) ? $this->reflection->getProperty($defaultName) : null;
+            $mRef = $this->reflection->hasMethod($defaultName) ? $this->reflection->getMethod($defaultName) : null;
 
             $value = match (true) {
                 $pRef !== null && !$pRef->isStatic() => $this->{$defaultName},
@@ -36,6 +38,12 @@ trait PropHelper {
             // Set the property to speed up future access
             $this->{$key} = $value;
             return $value;
+        }
+    }
+
+    private function initRef() {
+        if ($this->reflection === null) {
+            $this->reflection = new ReflectionClass($this);
         }
     }
 }

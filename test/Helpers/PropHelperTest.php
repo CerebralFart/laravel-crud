@@ -52,6 +52,14 @@ class PropHelperTest extends TestCase {
     public function test_undefined_default() {
         $this->assertNull($this->mock->missing);
     }
+
+    public function test_caches_defaults() {
+        $this->assertEquals(0, $this->mock->counter);
+        $_ = $this->mock->instanceFn;
+        $this->assertEquals(1, $this->mock->counter);
+        $_ = $this->mock->instanceFn;
+        $this->assertEquals(1, $this->mock->counter);
+    }
 }
 
 class PropHelperMock {
@@ -64,8 +72,10 @@ class PropHelperMock {
     }
 
     private string $defaultInstanceProp = 'defaultInstanceProp';
+    public int $counter = 0;
 
     private function defaultInstanceFn() {
+        $this->counter++;
         return 'defaultInstanceFn';
     }
 }
