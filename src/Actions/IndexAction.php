@@ -5,7 +5,6 @@ namespace Cerebralfart\LaravelCRUD\Actions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-// TODO [0.1.1] Allow filtering of items
 // TODO [0.2.0] Allow searching of items via FT-search
 trait IndexAction {
     public function index(Request $request) {
@@ -13,6 +12,7 @@ trait IndexAction {
 
         /** @var Builder $query */
         $query = $this->model::query();
+        $query = $this->applyFilter($request, $query);
         $query = $this->applySearch($request, $query);
         $query = $this->applyOrder($request, $query);
 
