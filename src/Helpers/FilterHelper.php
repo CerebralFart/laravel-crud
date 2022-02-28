@@ -40,14 +40,21 @@ trait FilterHelper {
             $idName = $model->getQualifiedKeyName();
 
             foreach ($filters as $filter => $active) {
-                /** @var Builder $qb */
-                $qb = $this->model::query();
-                $this->{$this->normalizeFilterFnName($filter)}($qb);
-                $ids = $qb->get($idName);
+                /** @var Builder $subQuery */
+                $subQuery = $this->model::query();
+                $this->{$this->normalizeFilterFnName($filter)}($subQuery);
 
-                $query = $active
-                    ? $query->whereIn($idName, $ids)
-                    : $query->whereNotIn($idName, $ids);
+                // Ensure we're selecting the id column, to prevent issues when the user wants to do something ""clever""
+                $subQuery->select($idName);
+
+                $query->whereRaw(
+                    sprintf('%s %s (%s)',
+                        $idName,
+                        $active ? 'IN' : 'NOT IN',
+                        $subQuery->toSql()
+                    ),
+                    $subQuery->getBindings()
+                );
             }
         }
         return $query;
