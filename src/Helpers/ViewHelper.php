@@ -33,6 +33,6 @@ trait ViewHelper {
                 array_merge($this->viewData, $data)
             );
         }
-        throw new Exception("Could not find a view for $name"); // TODO better error reporting
+        throw new Exception("Could not find a view for $name");
     }
 }

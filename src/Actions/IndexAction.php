@@ -5,7 +5,6 @@ namespace Cerebralfart\LaravelCRUD\Actions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-// TODO [0.2.0] Allow searching of items via FT-search
 trait IndexAction {
     public function index(Request $request) {
         $this->authorize('viewAny', $this->model);

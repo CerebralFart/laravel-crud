@@ -39,7 +39,6 @@ trait FilterHelper {
             $idName = $model->getQualifiedKeyName();
 
             foreach ($filters as $filter => $active) {
-                // TODO this should be doable using `WHERE id IN (SELECT ...) statements, which removes the back-and-forth between DB and code
                 /** @var Builder $qb */
                 $qb = $this->model::query();
                 $this->{$this->normalizeFilterFnName($filter)}($qb);

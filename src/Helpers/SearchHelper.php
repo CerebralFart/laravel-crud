@@ -28,6 +28,4 @@ trait SearchHelper {
 
         return $builder;
     }
-
-    // TODO [0.2.0] Add full text search
 }

@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-// TODO [0.1.1] Add validation of all fields
-// TODO [0.1.2] Allow checking policies through `BelongsTo` relations
 trait StoreAction {
     public function store(Request $request) {
         $this->authorize('create', $this->model);

@@ -5,8 +5,6 @@ namespace Cerebralfart\LaravelCRUD\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-// TODO [0.1.1] Add validation of dirty fields
-// TODO [0.1.2] Allow checking policies through `BelongsTo` relations
 trait UpdateAction {
     public function update(Request $request) {
         $instance = $this->resolveModel($request);
