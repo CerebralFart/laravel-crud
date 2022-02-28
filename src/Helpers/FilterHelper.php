@@ -34,6 +34,7 @@ trait FilterHelper {
     protected function applyFilter(Request $request, Builder $query): Builder {
         if ($request->has('filter')) {
             $filters = $this->resolveFilters($request);
+            $this->exposeToView('filter', $filters);
             /** @var Model $model */
             $model = $this->model::query()->newModelInstance();
             $idName = $model->getQualifiedKeyName();
