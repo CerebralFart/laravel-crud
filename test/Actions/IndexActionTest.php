@@ -7,7 +7,7 @@ use Cerebralfart\LaravelCRUD\Test\TestCase;
 
 class IndexActionTest extends TestCase {
     public function test_default_list() {
-        $response = $this->get('/');
+        $response = $this->get('/pokemon/');
         $json = json_decode($response->content(), TRUE);
 
         $this->assertDatabaseCount('pokemon', count($json));
@@ -20,19 +20,19 @@ class IndexActionTest extends TestCase {
     }
 
     public function test_filter() {
-        $response = $this->get('/?_filter[]=small');
+        $response = $this->get('/pokemon/?_filter[]=small');
 
         $response->assertJsonCount(7);
     }
 
     public function test_filter_inversion() {
-        $response = $this->get('/?_filter[]=!small');
+        $response = $this->get('/pokemon/?_filter[]=!small');
 
         $response->assertJsonCount(8);
     }
 
     public function test_filter_compounding() {
-        $response = $this->get('/?_filter[]=small&_filter[]=!light');
+        $response = $this->get('/pokemon/?_filter[]=small&_filter[]=!light');
 
         $response->assertJsonCount(1);
         $response->assertJson([
@@ -41,7 +41,7 @@ class IndexActionTest extends TestCase {
     }
 
     public function test_search() {
-        $response = $this->get('/?_search=Char');
+        $response = $this->get('/pokemon/?_search=Char');
 
         $response->assertJsonCount(3);
         $response->assertJson([
@@ -52,7 +52,7 @@ class IndexActionTest extends TestCase {
     }
 
     public function test_order() {
-        $response = $this->get('/?_order=weight');
+        $response = $this->get('/pokemon/?_order=weight');
 
         $response->assertJsonCount(15);
         $response->assertJson([
@@ -75,7 +75,7 @@ class IndexActionTest extends TestCase {
     }
 
     public function test_order_direction() {
-        $response = $this->get('/?_order=weight&_direction=ASC');
+        $response = $this->get('/pokemon/?_order=weight&_direction=ASC');
 
         $response->assertJsonCount(15);
         $response->assertJson([

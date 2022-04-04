@@ -30,7 +30,7 @@ class TestCase extends OrchestraTestCase {
     }
 
     protected function defineDatabaseMigrations() {
-        $r = $this->artisan('migrate', [
+        $this->artisan('migrate', [
             '--database' => 'testbench',
             '--path' => "../../../../test/Mocks/Migration.php"
         ])->run();
@@ -38,7 +38,7 @@ class TestCase extends OrchestraTestCase {
     }
 
     protected function defineRoutes($router) {
-        $router->resource('/', Controller::class);
+        $router->resource('pokemon', Controller::class);
     }
 
 
@@ -48,7 +48,7 @@ class TestCase extends OrchestraTestCase {
             $this->fail("Expected an exception to be thrown");
         } catch (Exception $exception) {
             $this->assertTrue(true);
-            if ($type !== null) $this->assertEquals($type, get_class($exception));
+            if ($type !== null) $this->assertInstanceOf($type, $exception);
             if ($assertions !== null) $assertions($exception);
         }
     }
