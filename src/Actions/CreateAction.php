@@ -12,7 +12,7 @@ trait CreateAction {
         $query = $this->model::query();
         $instance = $query->newModelInstance();
         return $this->view('create', [
-            $this->resolveModelName($request) => $instance
+            $this->resolveModelName($request, false) => $instance
         ]);
     }
 }

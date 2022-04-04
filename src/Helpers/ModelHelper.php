@@ -12,12 +12,14 @@ use Illuminate\Support\Str;
  * @property-read class-string<Model> $model
  */
 trait ModelHelper {
-    protected function resolveModelName(Request $request): string {
-        return Str::of($this->model)
+    protected function resolveModelName(Request $request, bool $plural): string {
+        $str = Str::of($this->model)
             ->afterLast('\\')
-            ->lower()
-            ->singular()
-            ->toString();
+            ->lower();
+        return ($plural
+            ? $str->plural()
+            : $str->singular()
+        )->toString();
     }
 
     protected function resolveModelId(Request $request): string {

@@ -9,7 +9,7 @@ trait EditAction {
         $instance = $this->resolveModel($request);
         $this->authorize('update', $instance);
         return $this->view('edit', [
-            $this->resolveModelName($request) => $instance
+            $this->resolveModelName($request, false) => $instance
         ]);
     }
 }

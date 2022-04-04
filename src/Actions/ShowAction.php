@@ -9,7 +9,7 @@ trait ShowAction {
         $instance = $this->resolveModel($request);
         $this->authorize('view', $instance);
         return $this->view('show', [
-            $this->resolveModelName($request) => $instance
+            $this->resolveModelName($request, false) => $instance
         ]);
     }
 }

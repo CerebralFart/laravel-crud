@@ -19,7 +19,7 @@ trait StoreAction {
 
     protected function storeActionResponse(Request $request, Model $model) {
         return $this->redirect('show', [
-            $this->resolveModelName($request) => $model,
+            $this->resolveModelName($request, false) => $model,
         ]);
     }
 }
