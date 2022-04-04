@@ -32,7 +32,7 @@ trait FilterHelper {
     }
 
     protected function applyFilter(Request $request, Builder $query): Builder {
-        if ($request->has('filter')) {
+        if ($request->has('_filter')) {
             $filters = $this->resolveFilters($request);
             $this->exposeToView('filter', $filters);
             /** @var Model $model */
