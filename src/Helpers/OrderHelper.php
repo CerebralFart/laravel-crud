@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 trait OrderHelper {
     use ViewHelper;
 
-    protected static string $defaultOrderDirection = 'DESC';
+    protected static string $defaultOrderDirection = 'ASC';
 
     protected function applyOrder(Request $request, Builder $builder): Builder {
         $orderColumn = $request->get('_order') ?? $this->orderColumn;
