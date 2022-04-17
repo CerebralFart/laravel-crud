@@ -37,18 +37,25 @@ class ObjPolicy implements Policy{
 }
 ```
 
-## Roadmap
-There are still a lot of features I want to implement, which are listed below. Note that this list is not prioritized.
+## List models
+### Filtering
+There are two ways to define filters in the CRUDController. All filters are defined as functions, but their interpretation depends on the argument it allows.
+Filtering on database level can be done by accepting a `Builder` instance, like the `filterDraft` below. You can apply any where-clause you'd like to.
+Alternatively, you can filter items once they are retrieved from the database, where you can interact with your models as you normally would. See the `filterHot` option below.
 
-- Create a `Route`-macro to easily register routes. To allow for flexibility, the proposed signature is `function(string $routePrefix, string $controller, ?string $namespace = null, ?array $actions = ['list', 'view', 'create', 'update', 'delete']): void`
-- Change naming of methods to be more in line with Laravel defaults
-- Allow checking policies through `BelongsTo` relations
-- The list page should allow filtering, both on database level and in code
-- The list page should allow ordering, both on database level and in code
-- A defaults for filtering and ordering may be configured
-- View resolution should be more flexible
-  - list => list.blade.php, Raise an error
-  - view => view.blade.php, Raise an error
-  - create => create.blade.php, upsert.blade.php, Raise an error
-  - update => update.blade.php, upsert.blade.php, Raise an error
-  - delete => delete.blade.php, Raise an error
+To activate one or more filters, simply pass their names to the `_filter` property in your request. The controller can accept multiple filters simultaneously, in which case they are applied in an AND-like manner.
+A default set of filters can be defined using the `defaultFilters` property on the controller.
+Should you want to invert a filter, e.g. retrieve all non-draft items, you can prefix the filter name in the request with an exclamation mark: `_filter=!draft`
+```php
+use \Illuminate\Database\Eloquent\Builder;
+
+class Controller extends CRUDController {
+    public function filterDraft(Builder $builder): void {
+        $builder->where('draft', true);
+    }
+
+    public function filterHot(Page $page): void {
+        return $page->comments()->count() > 10;
+    }
+}
+```
