@@ -28,7 +28,7 @@ trait ViewHelper {
         $chain = $this->viewMap[$name] ?? static::$defaultViewMap[$name];
         foreach ($chain as $option) {
             $view = $this->views . '.' . $option;
-            if (ViewFacade::exists($view)) return view(
+            if (ViewFacade::exists($view)) return ViewFacade::make(
                 $view,
                 array_merge($this->viewData, $data)
             );
