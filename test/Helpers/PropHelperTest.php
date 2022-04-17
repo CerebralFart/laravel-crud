@@ -17,7 +17,7 @@ class PropHelperTest extends TestCase {
     public function test_throws_on_required_props() {
         $this->assertThrows(
             fn() => $this->mock->model,
-            \Exception::class,
+            Exception::class,
             function (Exception $exception) {
                 $this->assertStringContainsString('PropHelperMock', $exception->getMessage());
                 $this->assertStringContainsString('$model', $exception->getMessage());
@@ -25,7 +25,7 @@ class PropHelperTest extends TestCase {
         );
         $this->assertThrows(
             fn() => $this->mock->views,
-            \Exception::class,
+            Exception::class,
             function (Exception $exception) {
                 $this->assertStringContainsString('PropHelperMock', $exception->getMessage());
                 $this->assertStringContainsString('$views', $exception->getMessage());

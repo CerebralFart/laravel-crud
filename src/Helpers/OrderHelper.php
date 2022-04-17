@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
  * @property-read string $orderDirection
  */
 trait OrderHelper {
+    use ViewHelper;
+
     protected static string $defaultOrderDirection = 'DESC';
 
     protected function applyOrder(Request $request, Builder $builder): Builder {

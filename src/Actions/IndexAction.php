@@ -16,7 +16,7 @@ trait IndexAction {
         $query = $this->applyOrder($request, $query);
 
         return $this->view('index', [
-            'items' => $query->get()
+            $this->resolveModelName($request, true) => $query->get()
         ]);
     }
 }

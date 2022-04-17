@@ -25,5 +25,10 @@
     },
     "require-dev": {
         "orchestra/testbench": "^7.0"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ]
     }
 }

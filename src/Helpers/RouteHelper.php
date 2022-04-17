@@ -16,7 +16,7 @@ trait RouteHelper {
         // Only copy over the parameters which are used by the new route
         // Prevents nasty URLs like /users?user=42 when going from .edit to .index
         $implicitParameters = Arr::only(
-            $current->parameters,
+            $current->parameters ?? [],
             Route::getRoutes()->getByName($route)->parameterNames(),
         );
 
