@@ -1,6 +1,30 @@
 # Laravel CRUD
 _An easy way to do your CRUD stuff_
 
+## Registering routes
+The CRUD controller works as a RESTful resource controller, so you can use the following one-liner to register a controller.
+```php
+Route::resource('/users', UserController::class);
+```
+
+This will register the following routes: 
+
+| Verb   | Path               | Action  | Name          |
+|--------|--------------------|---------|---------------|
+| GET    | /users             | index   | users.index   |
+| GET    | /users/create      | create  | users.create  |
+| POST   | /users             | store   | users.store   |
+| GET    | /users/{user}      | show    | users.show    |
+| GET    | /users/{user}/edit | edit    | users.edit    |
+| PUT    | /users/{user}      | update  | users.update  |
+| DELETE | /users/{user}      | destroy | users.destroy |
+
+If you only need some of these routes, you can use `->only`:
+```php
+Route::resource('/users', UserController::class)
+    ->only(['show', 'edit', 'update']);
+```
+
 ## General configuration
 
 ### Optional configuration
