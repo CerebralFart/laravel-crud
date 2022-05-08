@@ -56,6 +56,6 @@ trait ModelHelper {
     }
 
     protected function updateAttribute(Model $model, string $key, mixed $value): void {
-        $model->{$key} = $value;
+        $model->setAttribute($key, $value);
     }
 }
