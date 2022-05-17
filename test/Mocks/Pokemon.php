@@ -12,4 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Pokemon extends Model {
     public $timestamps = false;
+    protected $attributes = ['id' => 0]; // TODO why is this weird SQLite fix neccessary?
+    protected $fillable = ['name', 'weight', 'height'];
 }
