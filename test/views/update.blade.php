@@ -1,4 +1,4 @@
 {
-	"type": "list",
+	"type": "update",
 	"data": {!! json_encode($pokemon) !!}
 }
