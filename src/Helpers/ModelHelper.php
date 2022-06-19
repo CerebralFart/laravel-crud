@@ -13,16 +13,24 @@ use Illuminate\Support\Str;
 
 /**
  * @property-read class-string<Model> $model
+ * @property-read null|string|array<int, string> $modelName
  * @property-read array<string, string> $validationRules
  */
 trait ModelHelper {
+    protected $defaultModelName = null;
     protected array $defaultValidationRules = [];
 
     protected function resolveModelName(Request $request, bool $plural): string {
-        $str = Str::lower(Str::of($this->model)
-            ->afterLast('\\')
-            ->split('/(?=[A-Z])/')
-            ->last());
+        if (is_array($this->modelName)) {
+            return $this->modelName[$plural ? 1 : 0];
+        }
+
+        $str = is_string($this->modelName)
+            ? $this->modelName
+            : Str::lower(Str::of($this->model)
+                ->afterLast('\\')
+                ->split('/(?=[A-Z])/')
+                ->last());
 
         return $plural
             ? Str::plural($str)
