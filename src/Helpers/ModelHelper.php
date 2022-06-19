@@ -19,13 +19,14 @@ trait ModelHelper {
     protected array $defaultValidationRules = [];
 
     protected function resolveModelName(Request $request, bool $plural): string {
-        $str = Str::of($this->model)
+        $str = Str::lower(Str::of($this->model)
             ->afterLast('\\')
-            ->lower();
-        return ($plural
-            ? $str->plural()
-            : $str->singular()
-        )->toString();
+            ->split('/(?=[A-Z])/')
+            ->last());
+
+        return $plural
+            ? Str::plural($str)
+            : Str::singular($str);
     }
 
     protected function resolveModelId(Request $request): string {
