@@ -14,10 +14,9 @@ trait UpdateAction {
         $instance = $this->resolveModel($request);
         $this->authorize('update', $instance);
         $this->updateModel($instance, $request);
+        $this->validateModel($instance);
 
-        $errors = $this->validateModel($instance);
-        if ($errors) {
-            $this->exposeToView('errors', $errors);
+        if ($this->viewHasShared('errors')) {
             return $this->edit($request);
         } else {
             $instance->save();

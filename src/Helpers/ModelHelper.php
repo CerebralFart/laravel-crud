@@ -73,12 +73,13 @@ trait ModelHelper {
         $model->setAttribute($key, $value);
     }
 
-    protected function validateModel(Model $model): ?MessageBag {
+    protected function validateModel(Model $model): void {
         $rules = $this->selectValidationRules($model, $this->validationRules);
         $validator = Validator::make($model->getAttributes(), $rules);
-        return $validator->fails()
-            ? $validator->errors()
-            : null;
+
+        if ($validator->fails()) {
+            $this->shareToView('errors', $validator->errors());
+        }
     }
 
     protected function selectValidationRules(Model $model, array $rules): array {
