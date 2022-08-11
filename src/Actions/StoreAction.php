@@ -17,10 +17,9 @@ trait StoreAction {
         $query = $this->model::query();
         $instance = $query->newModelInstance();
         $this->updateModel($instance, $request);
+        $this->validateModel($instance);
 
-        $errors = $this->validateModel($instance);
-        if ($errors) {
-            $this->exposeToView('errors', $errors);
+        if ($this->viewHasShared('errors')) {
             return $this->create($request);
         } else {
             $instance->save();
