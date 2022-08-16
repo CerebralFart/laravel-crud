@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
  * @mixin FileNamingContract
  */
 trait ModelFolderFileNaming {
-    protected function determineFileName(Model $model, string $attribute, UploadedFile $file): string {
+    public function determineFileName(Model $model, string $attribute, UploadedFile $file): string {
         return sprintf("%s/%s.%s",
             $model->getKey(),
             $attribute,
