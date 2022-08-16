@@ -19,7 +19,7 @@ trait StoreAction {
         $this->updateModel($instance, $request);
         $this->validateModel($instance);
 
-        if ($this->viewHasShared('errors')) {
+        if ($this->hasErrors()) {
             return $this->create($request);
         } else {
             $instance->save();

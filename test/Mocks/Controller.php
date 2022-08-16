@@ -12,7 +12,7 @@ class Controller extends CRUDController {
     public $searchColumns = ['name'];
     public $searchMode = 'LIKE'; // TODO sqlite doesn't seem to support ILIKE
 
-    public $validationRules = [
+    public array $validationRules = [
         'name' => 'required|min:3'
     ];
 
