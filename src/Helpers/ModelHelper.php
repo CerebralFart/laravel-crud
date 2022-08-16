@@ -48,6 +48,7 @@ trait ModelHelper {
         foreach ($data as $key => $value) {
             $this->updateField($model, $key, $value);
         }
+        $this->updateFiles($model, $request);
     }
 
     protected function updateField(Model $model, string $key, mixed $value): void {
