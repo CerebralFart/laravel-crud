@@ -45,7 +45,11 @@ trait FileHelper {
                 $this->determineFileName($model, $attribute, $file)
             );
 
-            $wasSaved = Storage::disk($this->fileDisk)->putFile($fullPath, $file, $this->fileOptions);
+            $wasSaved = Storage::disk($this->fileDisk)->put(
+                $fullPath,
+                $file->getContent(),
+                $this->fileOptions
+            );
             if ($wasSaved === false) {
                 $this->addError($attribute, ['File could not be saved']);
             } else {
