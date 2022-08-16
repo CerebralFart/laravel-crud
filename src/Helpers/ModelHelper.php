@@ -14,11 +14,9 @@ use Illuminate\Support\Str;
 /**
  * @property-read class-string<Model> $model
  * @property-read null|string|array<int, string> $modelName
- * @property-read array<string, string> $validationRules
  */
 trait ModelHelper {
     protected $defaultModelName = null;
-    protected array $defaultValidationRules = [];
 
     protected function resolveModelName(Request $request, bool $plural): string {
         if (is_array($this->modelName)) {
@@ -50,6 +48,7 @@ trait ModelHelper {
         foreach ($data as $key => $value) {
             $this->updateField($model, $key, $value);
         }
+        $this->updateFiles($model, $request);
     }
 
     protected function updateField(Model $model, string $key, mixed $value): void {
@@ -71,18 +70,5 @@ trait ModelHelper {
 
     protected function updateAttribute(Model $model, string $key, mixed $value): void {
         $model->setAttribute($key, $value);
-    }
-
-    protected function validateModel(Model $model): void {
-        $rules = $this->selectValidationRules($model, $this->validationRules);
-        $validator = Validator::make($model->getAttributes(), $rules);
-
-        if ($validator->fails()) {
-            $this->shareToView('errors', $validator->errors());
-        }
-    }
-
-    protected function selectValidationRules(Model $model, array $rules): array {
-        return Arr::only($rules, array_keys($model->getDirty()));
     }
 }

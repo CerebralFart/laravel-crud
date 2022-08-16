@@ -44,6 +44,9 @@ trait ViewHelper {
     }
 
     protected function view(string $name, array $data = []): View {
+        if ($this->hasErrors()) {
+            ViewFacade::share('errors', $this->getErrors());
+        }
         ViewFacade::share($this->shared);
         $chain = $this->viewMap[$name] ?? static::$defaultViewMap[$name];
         foreach ($chain as $option) {
