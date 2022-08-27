@@ -52,4 +52,8 @@ class TestCase extends OrchestraTestCase {
             if ($assertions !== null) $assertions($exception);
         }
     }
+
+    public function pass(?string $message): void {
+        $this->assertTrue(true, $message);
+    }
 }
