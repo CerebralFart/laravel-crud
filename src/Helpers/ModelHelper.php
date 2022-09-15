@@ -41,15 +41,15 @@ trait ModelHelper {
         return $this->modelName[$plural ? 1 : 0];
     }
 
-    protected function resolveModelId(Request $request): string {
+    public function resolveModelId(Request $request): string {
         return last(Route::current()->parameters);
     }
 
-    protected function resolveModel(Request $request): ?Model {
+    public function resolveModel(Request $request): ?Model {
         return $this->model::find($this->resolveModelId($request));
     }
 
-    protected function updateModel(Model $model, Request $request): void {
+    public function updateModel(Model $model, Request $request): void {
         $data = $request->input();
         foreach ($data as $key => $value) {
             $this->updateField($model, $key, $value);
@@ -57,7 +57,7 @@ trait ModelHelper {
         $this->updateFiles($model, $request);
     }
 
-    protected function updateField(Model $model, string $key, mixed $value): void {
+    public function updateField(Model $model, string $key, mixed $value): void {
         if (Str::startsWith($key, '_')) return;
 
         if ($model->isRelation($key)) $this->updateRelation($model, $key, $value);
@@ -65,7 +65,7 @@ trait ModelHelper {
         else throw new Exception("Parameter ${key} could not be persisted");
     }
 
-    protected function updateRelation(Model $model, string $key, mixed $value): void {
+    public function updateRelation(Model $model, string $key, mixed $value): void {
         $relation = $model->{$key}();
         if (method_exists($relation, 'sync')) {
             $relation->sync($value === null ? [] : $value);
@@ -74,7 +74,7 @@ trait ModelHelper {
         }
     }
 
-    protected function updateAttribute(Model $model, string $key, mixed $value): void {
+    public function updateAttribute(Model $model, string $key, mixed $value): void {
         $model->setAttribute($key, $value);
     }
 }

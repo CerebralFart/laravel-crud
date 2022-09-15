@@ -24,7 +24,7 @@ trait UpdateAction {
         }
     }
 
-    protected function updateActionResponse(Request $request, Model $model) {
+    public function updateActionResponse(Request $request, Model $model) {
         return $this->redirect('show', [
             $this->resolveModelName($request, false) => $model,
         ]);

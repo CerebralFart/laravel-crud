@@ -13,7 +13,7 @@ trait SearchHelper {
     /** @var string A string to format the term by, accepts anything sprintf would */
     public string $searchFormat = '%%%s%%';
 
-    protected function applySearch(Request $request, Builder $builder): Builder {
+    public function applySearch(Request $request, Builder $builder): Builder {
         if ($request->has('_search')) {
             $search = $request->get('_search');
             $this->exposeToView('search', $search);

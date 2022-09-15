@@ -14,27 +14,27 @@ trait ValidationHelper {
     /** @var array<string, string> */
     public array $validationRules = [];
 
-    protected function addError(string $key, array $messages): void {
+    public function addError(string $key, array $messages): void {
         $errors = Session::get($this->sessionErrorKey, []);
         $errors[$key] = array_merge($errors[$key] ?? [], $messages);
         Session::flash($this->sessionErrorKey, $errors);
     }
 
-    protected function addErrors(MessageBag $messages): void {
+    public function addErrors(MessageBag $messages): void {
         $errors = Session::get($this->sessionErrorKey, []);
         $errors = array_merge_recursive($errors, $messages->toArray());
         Session::flash($this->sessionErrorKey, $errors);
     }
 
-    protected function hasErrors(): bool {
+    public function hasErrors(): bool {
         return count(Session::get($this->sessionErrorKey, [])) > 0;
     }
 
-    protected function getErrors(): MessageBag {
+    public function getErrors(): MessageBag {
         return new MessageBagImpl(Session::get($this->sessionErrorKey, []));
     }
 
-    protected function validate(array $data, array $rules): bool {
+    public function validate(array $data, array $rules): bool {
         $validator = Validator::make($data, $rules);
         if ($validator->fails()) {
             $this->addErrors($validator->getMessageBag());
@@ -43,7 +43,7 @@ trait ValidationHelper {
         return true;
     }
 
-    protected function validateModel(Model $model): bool {
+    public function validateModel(Model $model): bool {
         return $this->validate(
             $model->getAttributes(),
             $this->selectValidationRules($model, $this->validationRules)

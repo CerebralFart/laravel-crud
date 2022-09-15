@@ -18,7 +18,7 @@ trait FilterHelper {
      * @param Request $request
      * @return array<string, bool>
      */
-    protected function resolveFilters(Request $request): array {
+    public function resolveFilters(Request $request): array {
         $filters = $request->get('_filter', $this->filters);
         if (is_string($filters)) $filters = [$filters];
         if (is_null($filters)) $filters = [];
@@ -32,7 +32,7 @@ trait FilterHelper {
             ->toArray();
     }
 
-    protected function applyFilter(Request $request, Builder $query): Builder {
+    public function applyFilter(Request $request, Builder $query): Builder {
         if ($request->has('_filter') || $this->filters !== null) {
             $filters = $this->resolveFilters($request);
             $this->exposeToView('filter', $filters);
@@ -61,11 +61,11 @@ trait FilterHelper {
         return $query;
     }
 
-    protected function normalizeFilterName(string $name): string {
+    public function normalizeFilterName(string $name): string {
         return ltrim($name, $this->negationPrefix);
     }
 
-    protected function normalizeFilterFnName(string $name): string {
+    public function normalizeFilterFnName(string $name): string {
         return 'filter' . Str::ucfirst($this->normalizeFilterName($name));
     }
 }

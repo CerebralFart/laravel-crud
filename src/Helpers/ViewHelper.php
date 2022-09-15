@@ -17,10 +17,10 @@ trait ViewHelper {
         'edit' => ['edit', 'update', 'upsert'],
     ];
 
-    protected array $exposed = [];
-    protected array $shared = [];
+    private array $exposed = [];
+    private array $shared = [];
 
-    protected function exposeToView(string $name, mixed $data): void {
+    public function exposeToView(string $name, mixed $data): void {
         $this->exposed = array_merge_recursive(
             $this->exposed,
             [$name => $data]
@@ -42,7 +42,7 @@ trait ViewHelper {
         return array_key_exists($name, $this->shared);
     }
 
-    protected function view(string $name, array $data = []): View {
+    public function view(string $name, array $data = []): View {
         if ($this->hasErrors()) {
             ViewFacade::share('errors', $this->getErrors());
         }

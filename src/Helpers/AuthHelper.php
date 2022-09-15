@@ -29,7 +29,7 @@ trait AuthHelper {
      * @return void
      * @throws HttpException
      */
-    protected function authorize(string $ability, Model|string|null $model): void {
+    public function authorize(string $ability, Model|string|null $model): void {
         if (property_exists($this, 'authDisabled')) {
             if ($this->authDisabled === true) return;
             if (in_array($ability, $this->authDisabled)) return;

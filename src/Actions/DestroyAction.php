@@ -13,7 +13,7 @@ trait DestroyAction {
         return $this->destroyActionResponse($request, $instance);
     }
 
-    protected function destroyActionResponse(Request $request, Model $model) {
+    public function destroyActionResponse(Request $request, Model $model) {
         return $this->redirect('index');
     }
 }

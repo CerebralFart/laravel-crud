@@ -25,7 +25,7 @@ trait FileHelper {
     public ?string $fileFolder = null;
     public array $fileOptions = [];
 
-    protected function updateFiles(Model $model, Request $request): void {
+    public function updateFiles(Model $model, Request $request): void {
         $files = array_intersect(array_keys($_FILES), $this->files);
         foreach ($files as $name) {
             /** @var UploadedFile|null $file */
@@ -34,7 +34,7 @@ trait FileHelper {
         }
     }
 
-    protected function updateFile(Model $model, string $attribute, ?UploadedFile $file): void {
+    public function updateFile(Model $model, string $attribute, ?UploadedFile $file): void {
         if (!$this->validateFile($attribute, $file)) return;
 
         if ($file === null) {
@@ -58,7 +58,7 @@ trait FileHelper {
         }
     }
 
-    protected function validateFile(string $attribute, ?UploadedFile $file): bool {
+    public function validateFile(string $attribute, ?UploadedFile $file): bool {
         if (array_key_exists($attribute, $this->fileValidation)) {
             return $this->validate(
                 [$attribute => $file],
@@ -72,7 +72,7 @@ trait FileHelper {
         return $file->hashName();
     }
 
-    protected function normalizeFilePath(?string ...$sections): string {
+    public function normalizeFilePath(?string ...$sections): string {
         return Str::of(collect($sections)
             ->filter(fn(?string $val) => $val !== null)
             ->join('/'))
