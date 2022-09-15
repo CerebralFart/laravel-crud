@@ -6,12 +6,11 @@ use Exception;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
-/**
- * @property-read string $views
- * @property-read array<string, string[]> $viewMap
- */
 trait ViewHelper {
-    protected static $defaultViewMap = [
+    /** @var ?string The folder to search views in, using the standard blade dot-notation */
+    public ?string $views = null;
+    /** @var array<string, string[]> A list of op view names to check for a given route */
+    public array $viewMap = [
         'index' => ['index', 'list'],
         'create' => ['create', 'upsert'],
         'show' => ['show'],
@@ -48,7 +47,7 @@ trait ViewHelper {
             ViewFacade::share('errors', $this->getErrors());
         }
         ViewFacade::share($this->shared);
-        $chain = $this->viewMap[$name] ?? static::$defaultViewMap[$name];
+        $chain = $this->viewMap[$name];
         foreach ($chain as $option) {
             $view = $this->views . '.' . $option;
             if (ViewFacade::exists($view)) return ViewFacade::make(

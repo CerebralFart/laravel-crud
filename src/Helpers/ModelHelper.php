@@ -11,12 +11,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 
-/**
- * @property-read class-string<Model> $model
- * @property-read null|string|array<int, string> $modelName
- */
 trait ModelHelper {
-    protected $defaultModelName = null;
+    /** @var ?class-string<Model> The model to be used in this controller */
+    public ?string $model;
+    /** @var null|string|array<int, string> The name to be used when exposing this model to views */
+    public $modelName = null;
 
     protected function resolveModelName(Request $request, bool $plural): string {
         if (is_array($this->modelName)) {

@@ -5,20 +5,20 @@ namespace Cerebralfart\LaravelCRUD\Helpers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-/**
- * @property-read string[] $searchColumns
- * @property-read string $searchMode
- */
 trait SearchHelper {
-    protected array $defaultSearchColumns = [];
-    protected string $defaultSearchMode = 'ILIKE';
+    /** @var string[] The list of columns to search in */
+    public array $searchColumns = [];
+    /** @var string The search mode to use, for example `name ILIKE %CerebralFart% */
+    public string $searchMode = 'ILIKE';
+    /** @var string A string to format the term by, accepts anything sprintf would */
+    public string $searchFormat = '%%%s%%';
 
     protected function applySearch(Request $request, Builder $builder): Builder {
         if ($request->has('_search')) {
             $search = $request->get('_search');
             $this->exposeToView('search', $search);
 
-            $term = '%' . $search . '%';
+            $term = sprintf($this->searchFormat, $search);
             $builder->where(function (Builder $builder) use ($term) {
                 foreach ($this->searchColumns as $column) {
                     $builder->orWhere($column, $this->searchMode, $term);

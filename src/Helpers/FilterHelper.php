@@ -11,7 +11,8 @@ use Illuminate\Support\Str;
  * @property-read string[] $filters
  */
 trait FilterHelper {
-    private static string $negationPrefix = '!';
+    /** @var string Using the negation prefix in the _filters parameter indicates it should be inversed before use */
+    public string $negationPrefix = '!';
 
     /**
      * @param Request $request
@@ -25,7 +26,7 @@ trait FilterHelper {
         return collect($filters)
             ->reject(fn($val) => is_null($val))
             ->mapWithKeys(fn($name) => [
-                $this->normalizeFilterName($name) => !Str::startsWith($name, self::$negationPrefix)
+                $this->normalizeFilterName($name) => !Str::startsWith($name, $this->negationPrefix)
             ])
             ->filter(fn($_, $filter) => method_exists($this, $this->normalizeFilterFnName($filter)))
             ->toArray();
@@ -61,7 +62,7 @@ trait FilterHelper {
     }
 
     protected function normalizeFilterName(string $name): string {
-        return ltrim($name, self::$negationPrefix);
+        return ltrim($name, $this->negationPrefix);
     }
 
     protected function normalizeFilterFnName(string $name): string {

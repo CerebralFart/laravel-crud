@@ -5,19 +5,18 @@ namespace Cerebralfart\LaravelCRUD\Helpers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-/**
- * @property-read string $orderColumn
- * @property-read string $orderDirection
- */
 trait OrderHelper {
     use ViewHelper;
 
-    protected static string $defaultOrderDirection = 'ASC';
+    /** @var ?string The column by which the index view should be ordered, or null if results should not be explicitly ordered */
+    public ?string $orderColumn = null;
+    /** @var string The direction to sort the data by, most databases only support ASC or DESC */
+    public string $orderDirection = 'ASC';
 
-    protected function applyOrder(Request $request, Builder $builder): Builder {
-        $orderColumn = $request->get('_order') ?? $this->orderColumn;
+    public function applyOrder(Request $request, Builder $builder): Builder {
+        $orderColumn = $request->get('_order', $this->orderColumn);
         if ($orderColumn !== null) {
-            $direction = $request->get('_direction') ?? $this->orderDirection;
+            $direction = $request->get('_direction', $this->orderDirection);
             $this->exposeToView('order', $orderColumn);
             $this->exposeToView('direction', $direction);
             $builder->orderBy($orderColumn, $direction);

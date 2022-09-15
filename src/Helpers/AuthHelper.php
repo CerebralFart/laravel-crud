@@ -14,14 +14,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @property-read array<string, string> $authErrors
  */
 trait AuthHelper {
-    public static array $DEFAULT_ERRORS = [
+    public array $errors = [
         'viewAny' => 'You\'re not allowed to view these objects',
         'view' => 'You\'re not allowed to view this object',
         'create' => 'You\'re not allowed to create this type of object',
         'update' => 'You\'re not allowed to update this object',
         'delete' => 'You\'re not allowed to delete this object',
     ];
-    public static string $DEFAULT_ERROR = 'Authorization for action could not be established';
+    public string $defaultError = 'Authorization for action could not be established';
 
     /**
      * @param string $ability
@@ -46,8 +46,8 @@ trait AuthHelper {
 
             $message = $this->authErrors[$ability]
                 ?? $response->message()
-                ?? AuthHelper::$DEFAULT_ERRORS[$ability]
-                ?? AuthHelper::$DEFAULT_ERROR;
+                ?? $this->errors[$ability]
+                ?? $this->defaultError;
 
             throw new $errorType($message);
         }

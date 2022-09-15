@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag as MessageBagImpl;
 
 trait ValidationHelper {
-    protected string $sessionErrorKey = 'errors';
+    public string $sessionErrorKey = 'errors';
     /** @var array<string, string> */
-    protected array $validationRules = [];
+    public array $validationRules = [];
 
     protected function addError(string $key, array $messages): void {
         $errors = Session::get($this->sessionErrorKey, []);
