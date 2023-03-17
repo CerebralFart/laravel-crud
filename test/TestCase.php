@@ -42,17 +42,6 @@ class TestCase extends OrchestraTestCase {
     }
 
 
-    public function assertThrows(callable $callback, string $type = null, callable $assertions = null) {
-        try {
-            $callback();
-            $this->fail("Expected an exception to be thrown");
-        } catch (Exception $exception) {
-            $this->assertTrue(true);
-            if ($type !== null) $this->assertInstanceOf($type, $exception);
-            if ($assertions !== null) $assertions($exception);
-        }
-    }
-
     public function pass(?string $message): void {
         $this->assertTrue(true, $message);
     }

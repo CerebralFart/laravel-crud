@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-/**
- * @property-read string[] $filters
- */
 trait FilterHelper {
+    /** @var string[] A list of default filters, can be disabled by the user by passing ?_filter= */
+    public array $filters = [];
     /** @var string Using the negation prefix in the _filters parameter indicates it should be inversed before use */
     public string $negationPrefix = '!';
 
@@ -24,7 +23,7 @@ trait FilterHelper {
         if (is_null($filters)) $filters = [];
 
         return collect($filters)
-            ->reject(fn($val) => is_null($val))
+            ->reject(fn($val) => is_null($val)) // TODO replace with first class callable syntax once we bump to php 8.1
             ->mapWithKeys(fn($name) => [
                 $this->normalizeFilterName($name) => !Str::startsWith($name, $this->negationPrefix)
             ])
@@ -33,7 +32,7 @@ trait FilterHelper {
     }
 
     public function applyFilter(Request $request, Builder $query): Builder {
-        if ($request->has('_filter') || $this->filters !== null) {
+        if ($request->has('_filter') || $this->filters !== []) {
             $filters = $this->resolveFilters($request);
             $this->exposeToView('filter', $filters);
             /** @var Model $model */

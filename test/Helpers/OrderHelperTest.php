@@ -10,8 +10,12 @@ use Illuminate\Http\Request;
 class OrderHelperTest extends TestCase {
     use OrderHelper;
 
-    public $orderColumn = null;
-    public $orderDirection = 'DESC';
+
+    protected function setUp(): void {
+        parent::setUp();
+        $this->orderColumn = null;
+        $this->orderDirection = 'DESC';
+    }
 
     public function test_does_nothing_without_order_parameter() {
         $request = Request::create('/');

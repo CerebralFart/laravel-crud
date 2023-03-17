@@ -9,11 +9,11 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * @property-read boolean|array $authDisabled
- * @property-read array<string, string> $authErrors
- */
 trait AuthHelper {
+    /** @var boolean|string[] A list of authorization types which will always pass, use with caution */
+    public $authDisabled = false;
+    /** @var array<string, string> A map of authorization type to error message */
+    public array $authErrors = [];
     public array $errors = [
         'viewAny' => 'You\'re not allowed to view these objects',
         'view' => 'You\'re not allowed to view this object',
@@ -30,10 +30,7 @@ trait AuthHelper {
      * @throws HttpException
      */
     public function authorize(string $ability, Model|string|null $model): void {
-        if (property_exists($this, 'authDisabled')) {
-            if ($this->authDisabled === true) return;
-            if (in_array($ability, $this->authDisabled)) return;
-        }
+        if($this->isAuthDisabled($ability))return;
 
         $response = $model === null
             ? Response::deny() // Passing null as a model implies the action is not authorized
@@ -51,5 +48,11 @@ trait AuthHelper {
 
             throw new $errorType($message);
         }
+    }
+
+    public function isAuthDisabled(string $ability): bool {
+        if (is_bool($this->authDisabled)) return $this->authDisabled;
+        if (is_array($this->authDisabled)) return in_array($ability, $this->authDisabled);
+        return false;
     }
 }
